@@ -1,19 +1,36 @@
 package io.bakerystud.smartpit.viewmodels
 
+import androidx.lifecycle.MutableLiveData
 import io.bakerystud.smartpit.tracking.LocationTracker
 import io.bakerystud.smartpit.usecase.RecordingUseCase
+import io.bakerystud.smartpit.usecase.UploadUseCase
 import ru.terrakok.cicerone.Router
 
 class MainViewModel(
     router: Router,
     val locationListener: LocationTracker,
-    private val useCase: RecordingUseCase
+    private val recordUseCase: RecordingUseCase,
+    private val uploadUseCase: UploadUseCase
 ) : BaseApiInteractionViewModel(router) {
+    val recordingState = MutableLiveData<Boolean>()
+
     fun onStartRecording() {
-        useCase.startRecording()
+        if (recordingState.value == true) return
+        recordingState.value = true
+        recordUseCase.startRecording()
     }
 
     fun onStopRecording() {
-        val log = useCase.stopRecording()
+        if (recordingState.value == false) return
+        recordingState.value = false
+        val log = recordUseCase.stopRecording()
+        startProgress()
+        uploadUseCase.upload(log)
+            .subscribe(this::onUplaod, this::onApiInteractionError)
+            .disposeOnClear()
+    }
+
+    private fun onUplaod() {
+        message.value = "Saved successfully"
     }
 }

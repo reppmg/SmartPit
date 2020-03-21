@@ -15,6 +15,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
+import io.reactivex.*
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import toothpick.Toothpick
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -150,3 +155,22 @@ fun Throwable?.isNoInternet() : Boolean {
     return this is UnknownHostException || this is SocketTimeoutException
             || this?.cause is UnknownHostException || this?.cause is SocketTimeoutException
 }
+
+fun <T> Observable<T>.applyAsync(): Observable<T> =
+    compose { upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+
+fun <T> Single<T>.applyAsync(): Single<T> =
+    compose { upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+
+fun <T> BehaviorSubject<T>.applyAsync(): Observable<T> =
+    compose { upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+
+fun <T> Flowable<T>.applyAsync(): Flowable<T> =
+    compose { upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+
+fun <T> Maybe<T>.applyAsync(): Maybe<T> =
+    compose { upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+
+fun Completable.applyAsync(): Completable =
+    compose { upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+

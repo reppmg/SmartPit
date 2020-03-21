@@ -4,9 +4,12 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Criteria
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.PermissionChecker
+import androidx.lifecycle.Observer
 import io.bakerystud.smartpit.di.SCOPE
 import io.bakerystud.smartpit.di.providers.MainViewModelProvider
 import io.bakerystud.smartpit.viewmodels.MainViewModel
@@ -24,23 +27,55 @@ class MainActivity : AppCompatActivity() {
         viewModel = getViewModel(SCOPE, MainViewModelProvider::class.java)
 
         buttonStart.setOnClickListener {
-            buttonStart.hide()
-            textRecordProgress.show()
-            buttonStop.show()
             viewModel.onStartRecording()
         }
         buttonStop.setOnClickListener {
-            buttonStop.hide()
-            textRecordProgress.hide()
-            buttonStart.show()
             viewModel.onStopRecording()
-
         }
 
+        viewModel.recordingState.observe(this, Observer { isRecording ->
+            if (isRecording) {
+                buttonStart.hide()
+                textRecordProgress.show()
+                buttonStop.show()
+            } else {
+                buttonStop.hide()
+                textRecordProgress.hide()
+                buttonStart.show()
+            }
+        })
 
+        requestAppPermissions()
     }
 
-    fun onPermissionsGranted() {
+    private fun requestAppPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), 322
+            )
+        } else {
+            onPermissionsGranted()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == 322) {
+            if (grantResults.toList().all { it == PermissionChecker.PERMISSION_GRANTED }) {
+                onPermissionsGranted()
+                return
+            }
+        }
+        requestAppPermissions()
+    }
+
+    private fun onPermissionsGranted() {
         val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         val criteria = Criteria()
         criteria.accuracy = Criteria.ACCURACY_FINE

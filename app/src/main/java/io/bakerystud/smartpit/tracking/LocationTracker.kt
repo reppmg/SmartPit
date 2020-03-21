@@ -13,9 +13,6 @@ class LocationTracker @Inject constructor(
 
     private var isRecording = false
 
-    init {
-
-    }
 
     fun start() {
         isRecording = true

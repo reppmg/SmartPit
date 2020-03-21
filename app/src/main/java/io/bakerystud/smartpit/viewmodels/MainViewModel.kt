@@ -1,6 +1,7 @@
 package io.bakerystud.smartpit.viewmodels
 
 import androidx.lifecycle.MutableLiveData
+import io.bakerystud.smartpit.tracking.AccelerometerTracker
 import io.bakerystud.smartpit.tracking.LocationTracker
 import io.bakerystud.smartpit.usecase.RecordingUseCase
 import io.bakerystud.smartpit.usecase.UploadUseCase
@@ -10,7 +11,8 @@ class MainViewModel(
     router: Router,
     val locationListener: LocationTracker,
     private val recordUseCase: RecordingUseCase,
-    private val uploadUseCase: UploadUseCase
+    private val uploadUseCase: UploadUseCase,
+    val accelerometerTracker: AccelerometerTracker
 ) : BaseApiInteractionViewModel(router) {
     val recordingState = MutableLiveData<Boolean>()
 

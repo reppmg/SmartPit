@@ -9,10 +9,19 @@ import io.bakerystud.smartpit.tracking.AccelerometerTracker
 import io.bakerystud.smartpit.tracking.LocationTracker
 import io.bakerystud.smartpit.usecase.RecordingUseCase
 import io.bakerystud.smartpit.usecase.UploadUseCase
+import ru.terrakok.cicerone.Cicerone
+import ru.terrakok.cicerone.NavigatorHolder
+import ru.terrakok.cicerone.Router
 import toothpick.config.Module
 
 class MainModule(context: Context) : Module() {
     init {
+        val cicerone = Cicerone.create()
+        bind(Router::class.java).toInstance(cicerone.router)
+        bind(NavigatorHolder::class.java).toInstance(cicerone.navigatorHolder)
+
+        bind(Context::class.java).toInstance(context)
+
         bind(MainViewModelProvider::class.java).singletonInScope()
         bind(RecordingUseCase::class.java).singletonInScope()
         bind(UploadUseCase::class.java).singletonInScope()

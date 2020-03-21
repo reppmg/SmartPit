@@ -2,6 +2,8 @@ package io.bakerystud.smartpit
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.location.Criteria
 import android.location.LocationManager
 import android.os.Build
@@ -13,7 +15,9 @@ import androidx.lifecycle.Observer
 import io.bakerystud.smartpit.di.SCOPE
 import io.bakerystud.smartpit.di.providers.MainViewModelProvider
 import io.bakerystud.smartpit.viewmodels.MainViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Timber.plant(Timber.DebugTree())
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -44,6 +49,7 @@ class MainActivity : AppCompatActivity() {
                 buttonStart.show()
             }
         })
+        viewModel.message.observe(this, Observer { showSnackbar(it) })
 
         requestAppPermissions()
     }
@@ -101,5 +107,18 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        val rotationSensor: Sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+        val sensor: Sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
+        val gravS: Sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
+        val magSensor: Sensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+        sensorManager.registerListener(viewModel.accelerometerTracker, sensor, 500_000)
+        sensorManager.registerListener(viewModel.accelerometerTracker, rotationSensor, 50_000)
+        sensorManager.registerListener(viewModel.accelerometerTracker, gravS, 50_000)
+        sensorManager.registerListener(viewModel.accelerometerTracker, magSensor, 50_000)
+
+        viewModel.accelerometerTracker.zAccel
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {textZ.text = String.format("%.2f", it)}
     }
 }

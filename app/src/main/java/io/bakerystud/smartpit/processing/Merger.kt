@@ -17,7 +17,7 @@ class Merger @Inject constructor(
         val longitudes = locs.map { it.longitude }.toDoubleArray()
         val locTimes = locs.map { it.time.toDouble() }.toDoubleArray()
         val latitudeInterpolation = SplineInterpolator().interpolate(locTimes, latitudes)
-        val longitudeInterpolation = SplineInterpolator().interpolate(locTimes, latitudes)
+        val longitudeInterpolation = SplineInterpolator().interpolate(locTimes, longitudes)
         for (accelerationRecord in accs) {
             val time = accelerationRecord.timestamp.toDouble()
             val lat = latitudeInterpolation.value(time)

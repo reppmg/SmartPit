@@ -1,0 +1,54 @@
+ext {
+    appName = "Insite"
+    buildNumber = System.getenv("BUILD_NUMBER")
+    minor = System.getenv("MINOR")
+    patch = System.getenv("PATCH")
+    versionPrefix = "1.0."
+
+
+
+    if (buildNumber) {
+        applicationVersionCode = buildNumber as int
+        applicationVersionName = versionPrefix + buildNumber
+    } else {
+        applicationVersionCode = 1
+        applicationVersionName = "$versionPrefix$applicationVersionCode"
+    }
+    if (minor && patch) {
+        applicationVersionName = "1.$minor.$patch"
+    }
+
+//    applicationVersionCode = 2
+//    applicationVersionName = "$versionPrefix$applicationVersionCode"
+
+    apiBaseUrlDev = "\"https://wil-uxa-dev-wap-aue-mobilexl.azurewebsites.net/\""
+    // we need to move it into build flavors in future, keep it here for testing
+    apiBaseUrlUat = "\"https://wil-uxa-uat-wap-aue-mobilexl.azurewebsites.net/\""
+    apiBaseUrlProd = "\"https://wil-uxa-prd-wap-aue-mobilexl.azurewebsites.net/\""
+
+    hidAppId = "\"HID-WILLOW-INVESTA\""
+    hidAppDescription = "\"Insite app v1\""
+
+    binderPageUrl = '"https://sustainability.investa.com.au/binder/"'
+
+    foodNBeverageUrlDev = '"https://wil-dev-fnb-aue1-customerapp.azurewebsites.net/account/login"'
+    foodNBeverageUrlUat = '"https://wil-uat-fnb-aue1-customerapp.azurewebsites.net/account/login"'
+    foodNBeverageUrlProd = '"https://wil-prd-fnb-aue1-customerapp.azurewebsites.net/account/login"'
+    storeTypeCafe = '"Cafe"'
+    storeTypeDryCleaning = '"DryCleaning"'
+
+    devAuth0ClientId = "mA40ZekRSScGct4xvvhbA97EQZLLk37l"
+    devAuth0Domain = "willowplatform-dev.au.auth0.com"
+    devAuth0Audience = "https://willowplatform-web-dev"
+    devAuth0Connection = "Username-Password-Authentication"
+
+    uatAuth0ClientId = "HHv6Q5T2308qOpuq3aYGbVeuHvmPIL6p"
+    uatAuth0Domain = "willowplatform-uat.au.auth0.com"
+    uatAuth0Audience = "https://willowplatform-web-uat"
+    uatAuth0Connection = "Username-Password-Authentication"
+
+    prodAuth0ClientId = "DkUSkMsiUsJUK2fdn1vGB9FG623WUF7x"
+    prodAuth0Domain = "willowplatform-prd.au.auth0.com"
+    prodAuth0Audience = "https://willowplatform-web-prd"
+    prodAuth0Connection = "Username-Password-Authentication"
+}

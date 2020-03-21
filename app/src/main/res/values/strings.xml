@@ -3,4 +3,5 @@
     <string name="start_record">Start record</string>
     <string name="stop_record">Stop record</string>
     <string name="label_record_in_progress">Сидим пердим</string>
+    <string name="no_internet_retry">Connection problems, try again later</string>
 </resources>

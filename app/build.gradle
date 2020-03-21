@@ -15,6 +15,10 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        resValue "string", "access_key", "\"TnTgy-Z0ouWIyQOQ2DoNKA\""
+        resValue "string", "app_id", "\"4BLUoYaCnlZjpw3Ftfbu\""
+        resValue "string", "secret_key", "\"P5IPXSSom4my-1ebH1ojwzLynKRP1nSA_dJiRuv8E4vA8wqbRM0qIYG3_NU3_1nxCYMe2x64R-J1Z8MHK8njaA\""
     }
 
     buildTypes {
@@ -27,7 +31,9 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+
+
     //Navigation
     implementation commonDependencies.cicerone
 

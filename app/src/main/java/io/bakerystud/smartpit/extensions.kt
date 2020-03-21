@@ -16,6 +16,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import toothpick.Toothpick
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import java.util.*
 
 
@@ -143,3 +145,8 @@ val Calendar.hour: Int
     get() = get(Calendar.HOUR_OF_DAY)
 val Calendar.minute: Int
     get() = get(Calendar.MINUTE)
+
+fun Throwable?.isNoInternet() : Boolean {
+    return this is UnknownHostException || this is SocketTimeoutException
+            || this?.cause is UnknownHostException || this?.cause is SocketTimeoutException
+}

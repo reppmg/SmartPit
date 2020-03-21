@@ -14,21 +14,25 @@ class Merger @Inject constructor(
         val result = mutableListOf<RecordWithLocation>()
         val locs = locs.sortedBy { it.time }
         val lastLocationTime = locs.last().time
+        val speeds = locs.map { it.speed.toDouble() }.toDoubleArray()
         val latitudes = locs.map { it.latitude }.toDoubleArray()
         val longitudes = locs.map { it.longitude }.toDoubleArray()
         val locTimes = locs.map { it.time.toDouble() }.toDoubleArray()
         val latitudeInterpolation = SplineInterpolator().interpolate(locTimes, latitudes)
         val longitudeInterpolation = SplineInterpolator().interpolate(locTimes, longitudes)
+        val speedInterpolation = SplineInterpolator().interpolate(locTimes, speeds)
         for (accelerationRecord in accs.filter { it.timestamp < lastLocationTime }) {
             val time = accelerationRecord.timestamp.toDouble()
             val lat = latitudeInterpolation.value(time)
             val lon = longitudeInterpolation.value(time)
+            val speed = speedInterpolation.value(time)
             val recordWithLocation = RecordWithLocation(
                 accelerationRecord.x,
                 accelerationRecord.y,
                 accelerationRecord.z,
                 accelerationRecord.timestamp,
-                LatLng(lat, lon)
+                LatLng(lat, lon),
+                speed
             )
             result.add(recordWithLocation)
         }

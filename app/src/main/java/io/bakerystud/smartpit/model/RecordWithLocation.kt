@@ -5,5 +5,6 @@ data class RecordWithLocation(
     val y: Float,
     val z: Float,
     val timestamp: Long,
-    val location: LatLng
+    val location: LatLng,
+    val speed: Double
 )

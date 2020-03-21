@@ -27,14 +27,20 @@ class MainActivity : AppCompatActivity() {
             buttonStart.hide()
             textRecordProgress.show()
             buttonStop.show()
+            viewModel.onStartRecording()
         }
         buttonStop.setOnClickListener {
             buttonStop.hide()
             textRecordProgress.hide()
             buttonStart.show()
+            viewModel.onStopRecording()
+
         }
 
 
+    }
+
+    fun onPermissionsGranted() {
         val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         val criteria = Criteria()
         criteria.accuracy = Criteria.ACCURACY_FINE
@@ -45,8 +51,6 @@ class MainActivity : AppCompatActivity() {
         criteria.isBearingRequired = false
         val gpsFreqInMillis = 1000L
         val gpsFreqInDistance = 1.0f // in meters
-
-
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -61,7 +65,6 @@ class MainActivity : AppCompatActivity() {
             )
             return
         }
-
 
     }
 }

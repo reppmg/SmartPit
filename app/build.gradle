@@ -65,4 +65,7 @@ dependencies {
     implementation commonDependencies.glide
 
     implementation commonDependencies.keyboardListener
+
+    implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.0'
+
 }

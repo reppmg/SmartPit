@@ -9,14 +9,28 @@ class LocationTracker @Inject constructor(
 
 ) : LocationListener{
 
-    val data = mutableListOf<Location>()
+    private val data = mutableListOf<Location>()
+
+    private var isRecording = false
 
     init {
 
     }
 
+    fun start() {
+        isRecording = true
+    }
+
+    fun finish(): List<Location> {
+        val result = data.toList()
+        isRecording = false
+        data.clear()
+        return result
+    }
+
     override fun onLocationChanged(location: Location?) {
         location ?: return
+        if (!isRecording) return
         data.add(location)
     }
 

@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         criteria.isSpeedRequired = false
         criteria.isCostAllowed = true
         criteria.isBearingRequired = false
-        val gpsFreqInMillis = 10L
+        val gpsFreqInMillis = 500L
         val gpsFreqInDistance = 0.0f // in meters
         if (ActivityCompat.checkSelfPermission(
                 this,

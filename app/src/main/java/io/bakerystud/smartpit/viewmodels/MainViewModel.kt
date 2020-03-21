@@ -18,8 +18,12 @@ class MainViewModel(
 
     fun onStartRecording() {
         if (recordingState.value == true) return
-        recordingState.value = true
-        recordUseCase.startRecording()
+        try {
+            recordUseCase.startRecording()
+            recordingState.value = true
+        } catch (e: IllegalStateException) {
+            message.value = "No location data yet"
+        }
     }
 
     fun onStopRecording() {

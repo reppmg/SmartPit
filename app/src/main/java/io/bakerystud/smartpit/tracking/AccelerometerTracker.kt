@@ -9,6 +9,7 @@ import io.bakerystud.smartpit.model.Record
 import io.bakerystud.smartpit.storage.StoreManager
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.cos
@@ -80,7 +81,9 @@ class AccelerometerTracker @Inject constructor(
 
                 Matrix.invertM(inv, 0, R, 0)
                 Matrix.multiplyMV(earthAcc, 0, inv, 0, deviceRelativeAcceleration, 0)
-                val record = Record(earthAcc[0], earthAcc[1], earthAcc[2], event.timestamp)
+                val timestamp = event.timestamp
+                val date = System.currentTimeMillis()
+                val record = Record(earthAcc[0], earthAcc[1], earthAcc[2], date)
                 data.add(record)
                 zAccel.onNext(earthAcc[2])
                 yAccel.onNext(earthAcc[1])

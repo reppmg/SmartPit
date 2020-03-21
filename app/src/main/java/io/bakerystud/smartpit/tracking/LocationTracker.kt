@@ -17,6 +17,9 @@ class LocationTracker @Inject constructor() : LocationListener {
     private var isRecording = false
 
     fun start() {
+        if (data.isEmpty()) {
+            throw IllegalStateException("no location data yet")
+        }
         isRecording = true
     }
 
@@ -24,16 +27,17 @@ class LocationTracker @Inject constructor() : LocationListener {
         val result = data.toList()
         isRecording = false
         data.clear()
+        data.add(result.last())
         return result
     }
 
     override fun onLocationChanged(location: Location?) {
         Timber.d("onLocationChanged")
         location ?: return
+        data.add(location)
         if (!isRecording) return
         lat.onNext(location.latitude)
         lon.onNext(location.longitude)
-        data.add(location)
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {

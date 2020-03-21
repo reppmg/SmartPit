@@ -21,7 +21,7 @@ class StoreManager @Inject constructor(
     }
 
     private fun saveFile(fileName: String, text: String) {
-        val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
         val myDir = File(root, "ExifDemo")
         myDir.mkdirs()
         val logFile = File(myDir, fileName)

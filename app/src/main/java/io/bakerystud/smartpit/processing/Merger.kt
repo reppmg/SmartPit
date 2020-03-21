@@ -12,13 +12,14 @@ class Merger @Inject constructor(
 ) {
     fun mergeLocationToRecord(locs: List<Location>, accs: List<Record>): List<RecordWithLocation> {
         val result = mutableListOf<RecordWithLocation>()
-
+        val locs = locs.sortedBy { it.time }
+        val lastLocationTime = locs.last().time
         val latitudes = locs.map { it.latitude }.toDoubleArray()
         val longitudes = locs.map { it.longitude }.toDoubleArray()
         val locTimes = locs.map { it.time.toDouble() }.toDoubleArray()
         val latitudeInterpolation = SplineInterpolator().interpolate(locTimes, latitudes)
         val longitudeInterpolation = SplineInterpolator().interpolate(locTimes, longitudes)
-        for (accelerationRecord in accs) {
+        for (accelerationRecord in accs.filter { it.timestamp < lastLocationTime }) {
             val time = accelerationRecord.timestamp.toDouble()
             val lat = latitudeInterpolation.value(time)
             val lon = longitudeInterpolation.value(time)

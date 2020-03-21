@@ -1,0 +1,62 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+
+    defaultConfig {
+        applicationId "io.bakerystud.smartpit"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //Navigation
+    implementation commonDependencies.cicerone
+
+    //DI
+    implementation commonDependencies.toothpick
+    implementation commonDependencies.smoothie
+    kapt commonDependencies.tp_compiler
+
+
+    //RxJava
+    implementation commonDependencies.rxandroid
+    implementation commonDependencies.rxjava
+    implementation commonDependencies.rxrelay
+
+    //Network
+    implementation commonDependencies.retrofit
+    implementation commonDependencies.gson
+    implementation commonDependencies.rxjava_adapter
+    implementation commonDependencies.okhttp_logger
+
+    implementation commonDependencies.appCompat
+    implementation commonDependencies.constraint
+    implementation commonDependencies.lifecycleExt
+    implementation commonDependencies.material
+    implementation commonDependencies.progressButton
+
+
+    implementation commonDependencies.timber
+    implementation commonDependencies.glide
+
+    implementation commonDependencies.keyboardListener
+}

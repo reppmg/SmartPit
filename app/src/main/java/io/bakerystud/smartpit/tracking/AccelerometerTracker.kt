@@ -20,6 +20,8 @@ class AccelerometerTracker @Inject constructor(
 ) : SensorEventListener {
 
     val zAccel = BehaviorSubject.create<Float>()
+    val yAccel = BehaviorSubject.create<Float>()
+    val xAccel = BehaviorSubject.create<Float>()
 
     private val data = mutableListOf<Record>()
 
@@ -80,6 +82,9 @@ class AccelerometerTracker @Inject constructor(
                 Matrix.multiplyMV(earthAcc, 0, inv, 0, deviceRelativeAcceleration, 0)
                 val record = Record(earthAcc[0], earthAcc[1], earthAcc[2], event.timestamp)
                 data.add(record)
+                zAccel.onNext(earthAcc[2])
+                yAccel.onNext(earthAcc[1])
+                xAccel.onNext(earthAcc[0])
             }
             Sensor.TYPE_ROTATION_VECTOR -> {
                 orientationvalues[0] = event.values[0].toDouble()

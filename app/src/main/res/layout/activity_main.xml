@@ -46,7 +46,7 @@
         android:layout_marginBottom="@dimen/offset_large"
         />
     <TextView
-        android:id="@+id/textZ"
+        android:id="@+id/textX"
         android:layout_margin="@dimen/offset_large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,5 +54,39 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:text="asdas"
         />
+    <TextView
+        android:id="@+id/textY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textX"
+        app:layout_constraintStart_toStartOf="@id/textX"
+        tools:text="asdas"
+        />
+    <TextView
+        android:id="@+id/textZ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textY"
+        app:layout_constraintStart_toStartOf="@id/textX"
+        tools:text="asdas"
+        />
+    <TextView
+        android:id="@+id/textLat"
+        android:layout_margin="@dimen/offset_large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="asdas"
+        />
+    <TextView
+        android:id="@+id/textLon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textLat"
+        app:layout_constraintEnd_toEndOf="@id/textLat"
+        tools:text="asdas"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -90,12 +90,12 @@ class MainActivity : AppCompatActivity() {
         criteria.isSpeedRequired = false
         criteria.isCostAllowed = true
         criteria.isBearingRequired = false
-        val gpsFreqInMillis = 1000L
-        val gpsFreqInDistance = 1.0f // in meters
+        val gpsFreqInMillis = 10L
+        val gpsFreqInDistance = 0.0f // in meters
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
             locationManager.requestLocationUpdates(
                 gpsFreqInMillis,
@@ -104,7 +104,6 @@ class MainActivity : AppCompatActivity() {
                 viewModel.locationListener,
                 null
             )
-            return
         }
 
         val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
@@ -120,5 +119,17 @@ class MainActivity : AppCompatActivity() {
         viewModel.accelerometerTracker.zAccel
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {textZ.text = String.format("%.2f", it)}
+        viewModel.accelerometerTracker.xAccel
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {textX.text = String.format("%.2f", it)}
+        viewModel.accelerometerTracker.yAccel
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {textY.text = String.format("%.2f", it)}
+        viewModel.locationListener.lat
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {textLat.text = String.format("%.4f", it)}
+        viewModel.locationListener.lon
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {textLon.text = String.format("%.4f", it)}
     }
 }

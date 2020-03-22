@@ -18,7 +18,7 @@ class RecordingUseCase @Inject constructor(
     private val accelerometerTracker: AccelerometerTracker,
     private val merger: Merger
 ) {
-    private val windowSize: Int = 8
+    private val windowSize: Int = 2
 
     val events = mutableListOf<RecordWithLocation>()
 

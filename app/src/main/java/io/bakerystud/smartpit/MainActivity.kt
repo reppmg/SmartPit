@@ -15,6 +15,7 @@ import androidx.core.content.PermissionChecker
 import androidx.lifecycle.Observer
 import io.bakerystud.smartpit.di.SCOPE
 import io.bakerystud.smartpit.di.providers.MainViewModelProvider
+import io.bakerystud.smartpit.model.BumpType
 import io.bakerystud.smartpit.viewmodels.MainViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -51,7 +52,16 @@ class MainActivity : AppCompatActivity() {
             }
         })
         viewModel.message.observe(this, Observer { showSnackbar(it) })
-        viewModel.isPit.observe(this, Observer { root.setBackgroundColor(if (it) color(R.color.colorPit) else color(R.color.white)) })
+        viewModel.isPit.observe(this, Observer {
+            root.setBackgroundColor(
+                when (it) {
+                    BumpType.NO -> color(R.color.white)
+                    BumpType.LOW -> color(R.color.colorLow)
+                    BumpType.HIGH -> color(R.color.colorHigh)
+                    else -> color(R.color.white)
+                }
+            )
+        })
 
         requestAppPermissions()
     }
@@ -122,18 +132,18 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.accelerometerTracker.zAccel
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {textZ.text = String.format("%.2f", it)}
+            .subscribe { textZ.text = String.format("%.2f", it) }
         viewModel.accelerometerTracker.xAccel
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {textX.text = String.format("%.2f", it)}
+            .subscribe { textX.text = String.format("%.2f", it) }
         viewModel.accelerometerTracker.yAccel
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {textY.text = String.format("%.2f", it)}
+            .subscribe { textY.text = String.format("%.2f", it) }
         viewModel.locationListener.lat
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {textLat.text = String.format("%.4f", it)}
+            .subscribe { textLat.text = String.format("%.4f", it) }
         viewModel.locationListener.lon
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {textLon.text = String.format("%.4f", it)}
+            .subscribe { textLon.text = String.format("%.4f", it) }
     }
 }

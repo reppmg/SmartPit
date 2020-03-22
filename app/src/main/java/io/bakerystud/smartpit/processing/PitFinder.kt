@@ -1,23 +1,41 @@
 package io.bakerystud.smartpit.processing
 
+import io.bakerystud.smartpit.model.BumpType
 import io.bakerystud.smartpit.model.RecordWithLocation
-import kotlin.math.abs
+
 
 object PitFinder {
-    fun hasBumpByMean(events: Array<RecordWithLocation>): Boolean {
+
+    fun hasBumpByMean(events: Array<RecordWithLocation>): BumpType {
         val mean = calculateZMean(events)
-        return mean > 0.3
+        return if (mean > 0.3) {
+            BumpType.HIGH
+        } else if (mean > 0.2) {
+            BumpType.LOW
+        } else {
+            BumpType.NO
+        }
     }
 
-    fun hasBumpByDiff(events: Array<RecordWithLocation>): Boolean {
+    fun hasBumpByDiff(events: Array<RecordWithLocation>): BumpType {
         val diff = calculateZDiff(events)
-        return diff > 1
+        return when {
+            diff > 1 -> {
+                BumpType.HIGH
+            }
+            diff > 0.5 -> {
+                BumpType.LOW
+            }
+            else -> {
+                BumpType.NO
+            }
+        }
     }
 
     private fun calculateZMean(events: Array<RecordWithLocation>): Float {
         var mean = 0f
         for (e in events) {
-            val z: Float = abs(e.z)
+            val z: Float = Math.abs(e.z)
             mean += z
         }
         return mean

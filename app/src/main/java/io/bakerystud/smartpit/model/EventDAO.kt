@@ -4,7 +4,8 @@ data class EventDAO(
     val latitude: Double,
     val longitude: Double,
     val timestamp: Long,
-    val speed: Double
+    val speed: Double,
+    val category: Int
 )
 
 fun RecordWithLocation.toDao(): EventDAO {
@@ -12,6 +13,11 @@ fun RecordWithLocation.toDao(): EventDAO {
         this.location.latitude,
         this.location.longitude,
         this.timestamp,
-        this.speed
+        this.speed,
+        when (this.category) {
+            BumpType.HIGH -> 1
+            BumpType.LOW -> 0
+            else -> -1
+        }
     )
 }

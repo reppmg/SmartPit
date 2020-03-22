@@ -6,6 +6,7 @@ data class RecordWithLocation(
     val z: Float,
     val timestamp: Long,
     val location: LatLng,
-    val speed: Double
+    val speed: Double,
+    val category: BumpType = BumpType.LOW
 )
 

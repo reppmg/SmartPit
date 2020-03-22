@@ -1,6 +1,7 @@
 package io.bakerystud.smartpit.viewmodels
 
 import androidx.lifecycle.MutableLiveData
+import io.bakerystud.smartpit.model.BumpType
 import io.bakerystud.smartpit.tracking.AccelerometerTracker
 import io.bakerystud.smartpit.tracking.LocationTracker
 import io.bakerystud.smartpit.usecase.RecordingUseCase
@@ -17,7 +18,7 @@ class MainViewModel(
 ) : BaseApiInteractionViewModel(router) {
     val recordingState = MutableLiveData<Boolean>()
 
-    val isPit = MutableLiveData<Boolean>()
+    val isPit = MutableLiveData<BumpType>()
 
     fun onStartRecording() {
         if (recordingState.value == true) return
@@ -31,7 +32,7 @@ class MainViewModel(
         }
     }
 
-    private fun onClassificationResult(isPit: Boolean) {
+    private fun onClassificationResult(isPit: BumpType) {
         this.isPit.value = isPit
     }
 

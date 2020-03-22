@@ -2,6 +2,7 @@ package io.bakerystud.smartpit.usecase
 
 import android.location.Location
 import io.bakerystud.smartpit.applyAsync
+import io.bakerystud.smartpit.model.BumpType
 import io.bakerystud.smartpit.model.Record
 import io.bakerystud.smartpit.model.RecordWithLocation
 import io.bakerystud.smartpit.processing.Merger
@@ -21,7 +22,7 @@ class RecordingUseCase @Inject constructor(
 
     val events = mutableListOf<RecordWithLocation>()
 
-    fun startRecording(): Observable<Boolean> {
+    fun startRecording(): Observable<BumpType> {
         locationTracker.start()
         accelerometerTracker.start()
 
@@ -32,12 +33,12 @@ class RecordingUseCase @Inject constructor(
                 val location = locationTracker.data.last()
 
                 if (recordsWindow.size < windowSize) {
-                    return@map false
+                    return@map BumpType.NO
                 } else {
                     val events =
                         merger.mergeWithoutInterpolation(recordsWindow, location).toTypedArray()
-                    val hasBump = PitFinder.hasBumpByMean(events)
-                    if (hasBump) {
+                    val hasBump = PitFinder.hasBumpByDiff(events)
+                    if (hasBump != BumpType.NO) {
                         this.events.add(
                             RecordWithLocation(
                                 events.map { it.x }.average().toFloat(),
@@ -45,7 +46,8 @@ class RecordingUseCase @Inject constructor(
                                 events.map { it.z }.average().toFloat(),
                                 events.map { it.timestamp }.average().toLong(),
                                 events[events.size / 2].location,
-                                events.map { it.speed }.average()
+                                events.map { it.speed }.average(),
+                                hasBump
                             )
                         )
                     }

@@ -2,6 +2,7 @@ package io.bakerystud.smartpit.usecase
 
 import android.location.Location
 import io.bakerystud.smartpit.applyAsync
+import io.bakerystud.smartpit.model.Record
 import io.bakerystud.smartpit.model.RecordWithLocation
 import io.bakerystud.smartpit.processing.Merger
 import io.bakerystud.smartpit.processing.PitFinder
@@ -22,17 +23,16 @@ class RecordingUseCase @Inject constructor(
         locationTracker.start()
         accelerometerTracker.start()
 
-        return locationTracker.locationObservable
-            .map { loc: Location ->
-                val locs = locationTracker.data
-                val pastAccels = accelerometerTracker.data.filter { it.timestamp < loc.time }
-                if (pastAccels.size < windowSize || locs.size < 4) {
+        return accelerometerTracker.dataObservable
+            .buffer(windowSize)
+            .map { recordsWindow: List<Record> ->
+                val location = locationTracker.data.last()
+
+                if (recordsWindow.size < windowSize) {
                     return@map false
                 } else {
-                    val events = merger.mergeLocationToRecord(
-                        locs,
-                        pastAccels.takeLast(windowSize)
-                    ).toTypedArray()
+                    val events =
+                        merger.mergeWithoutInterpolation(recordsWindow, location).toTypedArray()
                     PitFinder.hasBumpByMean(events)
                 }
             }.applyAsync()
@@ -44,7 +44,7 @@ class RecordingUseCase @Inject constructor(
         val times = locations.map { it.time }
         Timber.d("stopRecording locs: ${times.min()} - ${times.max()}")
         val timess = accels.map { it.timestamp }
-        Timber.d("stopRecording locs: ${timess.min()} - ${timess.max()}")
+        Timber.d("stopRecording accels: ${timess.min()} - ${timess.max()}")
         return merger.mergeLocationToRecord(locations, accels)
     }
 }

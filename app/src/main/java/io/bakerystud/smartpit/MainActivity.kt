@@ -8,6 +8,7 @@ import android.location.Criteria
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.PermissionChecker
@@ -112,10 +113,11 @@ class MainActivity : AppCompatActivity() {
         val sensor: Sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
         val gravS: Sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
         val magSensor: Sensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-        sensorManager.registerListener(viewModel.accelerometerTracker, sensor, 500_000)
-        sensorManager.registerListener(viewModel.accelerometerTracker, rotationSensor, 50_000)
-        sensorManager.registerListener(viewModel.accelerometerTracker, gravS, 50_000)
-        sensorManager.registerListener(viewModel.accelerometerTracker, magSensor, 50_000)
+        val speed = SensorManager.SENSOR_DELAY_NORMAL
+        sensorManager.registerListener(viewModel.accelerometerTracker, sensor, speed)
+        sensorManager.registerListener(viewModel.accelerometerTracker, rotationSensor, speed)
+        sensorManager.registerListener(viewModel.accelerometerTracker, gravS, speed)
+        sensorManager.registerListener(viewModel.accelerometerTracker, magSensor, speed)
 
         viewModel.accelerometerTracker.zAccel
             .observeOn(AndroidSchedulers.mainThread())

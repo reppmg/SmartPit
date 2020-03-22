@@ -39,4 +39,17 @@ class Merger @Inject constructor(
 
         return result
     }
+
+    fun mergeWithoutInterpolation(accs: List<Record>, location: Location): List<RecordWithLocation> {
+        return accs.map {
+            RecordWithLocation(
+                it.x,
+                it.y,
+                it.z,
+                it.timestamp,
+                LatLng(location.latitude, location.longitude),
+                location.speed.toDouble()
+            )
+        }
+    }
 }

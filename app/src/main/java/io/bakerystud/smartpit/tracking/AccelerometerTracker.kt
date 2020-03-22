@@ -15,6 +15,7 @@ import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.random.Random
 
 
 class AccelerometerTracker @Inject constructor(
@@ -27,7 +28,7 @@ class AccelerometerTracker @Inject constructor(
 
     val data = mutableListOf<Record>()
 
-    val zAccelerationObservable = ReplaySubject.create<Float>() // z axis accel subject
+    val dataObservable = ReplaySubject.create<Record>() // z axis accel subject
 
     private var isRecording = false
 
@@ -87,6 +88,7 @@ class AccelerometerTracker @Inject constructor(
                 val timestamp = event.timestamp
                 val date = System.currentTimeMillis()
                 val record = Record(earthAcc[0], earthAcc[1], earthAcc[2], date)
+                dataObservable.onNext(record)
                 data.add(record)
                 zAccel.onNext(earthAcc[2])
                 yAccel.onNext(earthAcc[1])

@@ -6,6 +6,7 @@ import io.bakerystud.smartpit.tracking.LocationTracker
 import io.bakerystud.smartpit.usecase.RecordingUseCase
 import io.bakerystud.smartpit.usecase.UploadUseCase
 import ru.terrakok.cicerone.Router
+import timber.log.Timber
 
 class MainViewModel(
     router: Router,
@@ -44,6 +45,7 @@ class MainViewModel(
         val log = recordUseCase.stopRecording()
         val events = recordUseCase.events
         startProgress()
+        Timber.d("onStopRecording uploading ${events.size} events")
         uploadUseCase.upload(log, events)
             .subscribe(this::onUplaod, this::onApiInteractionError)
             .disposeOnClear()

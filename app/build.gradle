@@ -21,7 +21,7 @@ android {
         resValue "string", "secret_key", "\"P5IPXSSom4my-1ebH1ojwzLynKRP1nSA_dJiRuv8E4vA8wqbRM0qIYG3_NU3_1nxCYMe2x64R-J1Z8MHK8njaA\""
 
 
-        buildConfigField "String", "API_URL", "\"http://3.126.201.66:8080/api\""
+        buildConfigField "String", "API_URL", "\"http://3.126.201.66:8080/api/\""
     }
 
     buildTypes {

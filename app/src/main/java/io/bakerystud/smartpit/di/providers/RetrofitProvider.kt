@@ -1,6 +1,7 @@
 package io.bakerystud.smartpit.di.providers
 
 import com.google.gson.Gson
+import io.bakerystud.smartpit.di.ServerPath
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

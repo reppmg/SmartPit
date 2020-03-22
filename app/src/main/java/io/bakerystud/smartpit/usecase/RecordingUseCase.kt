@@ -36,8 +36,20 @@ class RecordingUseCase @Inject constructor(
                 } else {
                     val events =
                         merger.mergeWithoutInterpolation(recordsWindow, location).toTypedArray()
-                    this.events.addAll(events)
-                    PitFinder.hasBumpByMean(events)
+                    val hasBump = PitFinder.hasBumpByMean(events)
+                    if (hasBump) {
+                        this.events.add(
+                            RecordWithLocation(
+                                events.map { it.x }.average().toFloat(),
+                                events.map { it.y }.average().toFloat(),
+                                events.map { it.z }.average().toFloat(),
+                                events.map { it.timestamp }.average().toLong(),
+                                events[events.size / 2].location,
+                                events.map { it.speed }.average()
+                            )
+                        )
+                    }
+                    return@map hasBump
                 }
             }
             .applyAsync()

@@ -14,6 +14,7 @@
         android:theme="@style/AppTheme"
         android:name=".Application"
         android:requestLegacyExternalStorage="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         >
 
         <meta-data android:name="com.here.sdk.access_key_id" android:value="@string/access_key" />

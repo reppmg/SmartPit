@@ -1,10 +1,12 @@
 package io.bakerystud.commonapi.providers
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import io.bakerystud.smartpit.di.providers.Tls12SocketFactory
-import okhttp3.*
+import okhttp3.Cache
+import okhttp3.ConnectionSpec
+import okhttp3.OkHttpClient
+import okhttp3.TlsVersion
 import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -17,8 +19,7 @@ import javax.net.ssl.SSLContext
  * @author Konstantin Tskhovrebov (aka terrakok) on 20.06.17.
  */
 class OkHttpClientProvider @Inject constructor(
-    private val context: Context,
-    private val authenticator: Authenticator
+    private val context: Context
 ) : Provider<OkHttpClient> {
 
     override fun get() = with(OkHttpClient.Builder()) {
@@ -27,7 +28,6 @@ class OkHttpClientProvider @Inject constructor(
         readTimeout(90, TimeUnit.SECONDS)
         writeTimeout(90, TimeUnit.SECONDS)
 
-        authenticator(authenticator)
         addNetworkInterceptor(
             HttpLoggingInterceptor(ConfinedLogger()).apply { level = HttpLoggingInterceptor.Level.BODY }
         )

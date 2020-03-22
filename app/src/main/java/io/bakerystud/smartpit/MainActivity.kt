@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
         viewModel.message.observe(this, Observer { showSnackbar(it) })
-        viewModel.isPit.observe(this, Observer { root.setBackgroundColor(if (it) color(R.color.colorRed) else color(R.color.white)) })
+        viewModel.isPit.observe(this, Observer { root.setBackgroundColor(if (it) color(R.color.colorPit) else color(R.color.white)) })
 
         requestAppPermissions()
     }
@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity() {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ), 322
             )
+
         } else {
             onPermissionsGranted()
         }

@@ -14,7 +14,7 @@ class StoreManager @Inject constructor(
 ) {
     fun saveLog(data: List<RecordWithLocation>) {
         val jsonLog = Gson().toJson(data)
-        val simpleDateFormat = SimpleDateFormat("MM-dd_hh:mm:ss-S", Locale.US)
+        val simpleDateFormat = SimpleDateFormat("MM-dd_hh:mm:ss-SSSS", Locale.US)
         val date = simpleDateFormat.format(Date())
         val fileName = "$date.json"
         saveFile(fileName, jsonLog)

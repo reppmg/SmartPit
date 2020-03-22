@@ -17,7 +17,7 @@ class RecordingUseCase @Inject constructor(
     private val accelerometerTracker: AccelerometerTracker,
     private val merger: Merger
 ) {
-    private val windowSize: Int = 3
+    private val windowSize: Int = 8
 
     fun startRecording(): Observable<Boolean> {
         locationTracker.start()

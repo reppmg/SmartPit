@@ -93,6 +93,7 @@ class AccelerometerTracker @Inject constructor(
                 zAccel.onNext(earthAcc[2])
                 yAccel.onNext(earthAcc[1])
                 xAccel.onNext(earthAcc[0])
+
             }
             Sensor.TYPE_ROTATION_VECTOR -> {
                 orientationvalues[0] = event.values[0].toDouble()

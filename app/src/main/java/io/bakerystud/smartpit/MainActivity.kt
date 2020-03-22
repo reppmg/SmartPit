@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
         viewModel.message.observe(this, Observer { showSnackbar(it) })
+        viewModel.isPit.observe(this, Observer { root.setBackgroundColor(if (it) color(R.color.colorRed) else color(R.color.white)) })
 
         requestAppPermissions()
     }

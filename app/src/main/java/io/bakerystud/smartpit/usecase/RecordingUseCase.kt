@@ -1,9 +1,13 @@
 package io.bakerystud.smartpit.usecase
 
+import android.location.Location
+import io.bakerystud.smartpit.applyAsync
 import io.bakerystud.smartpit.model.RecordWithLocation
 import io.bakerystud.smartpit.processing.Merger
+import io.bakerystud.smartpit.processing.PitFinder
 import io.bakerystud.smartpit.tracking.AccelerometerTracker
 import io.bakerystud.smartpit.tracking.LocationTracker
+import io.reactivex.Observable
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -12,13 +16,29 @@ class RecordingUseCase @Inject constructor(
     private val accelerometerTracker: AccelerometerTracker,
     private val merger: Merger
 ) {
+    private val windowSize: Int = 3
 
-    fun startRecording() {
+    fun startRecording(): Observable<Boolean> {
         locationTracker.start()
         accelerometerTracker.start()
+
+        return locationTracker.locationObservable
+            .map { loc: Location ->
+                val locs = locationTracker.data
+                val pastAccels = accelerometerTracker.data.filter { it.timestamp < loc.time }
+                if (pastAccels.size < windowSize || locs.size < 4) {
+                    return@map false
+                } else {
+                    val events = merger.mergeLocationToRecord(
+                        locs,
+                        pastAccels.takeLast(windowSize)
+                    ).toTypedArray()
+                    PitFinder.hasBumpByMean(events)
+                }
+            }.applyAsync()
     }
 
-    fun stopRecording() : List<RecordWithLocation> {
+    fun stopRecording(): List<RecordWithLocation> {
         val locations = locationTracker.finish()
         val accels = accelerometerTracker.finish()
         val times = locations.map { it.time }

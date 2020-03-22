@@ -8,6 +8,7 @@ import android.opengl.Matrix
 import io.bakerystud.smartpit.model.Record
 import io.bakerystud.smartpit.storage.StoreManager
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.ReplaySubject
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -24,7 +25,9 @@ class AccelerometerTracker @Inject constructor(
     val yAccel = BehaviorSubject.create<Float>()
     val xAccel = BehaviorSubject.create<Float>()
 
-    private val data = mutableListOf<Record>()
+    val data = mutableListOf<Record>()
+
+    val zAccelerationObservable = ReplaySubject.create<Float>() // z axis accel subject
 
     private var isRecording = false
 

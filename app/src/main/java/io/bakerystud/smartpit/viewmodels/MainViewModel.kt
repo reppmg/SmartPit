@@ -16,14 +16,26 @@ class MainViewModel(
 ) : BaseApiInteractionViewModel(router) {
     val recordingState = MutableLiveData<Boolean>()
 
+    val isPit = MutableLiveData<Boolean>()
+
     fun onStartRecording() {
         if (recordingState.value == true) return
         try {
             recordUseCase.startRecording()
+                .subscribe(this::onClassificationResult, this::onError)
+                .disposeOnClear()
             recordingState.value = true
         } catch (e: IllegalStateException) {
             message.value = "No location data yet"
         }
+    }
+
+    private fun onClassificationResult(isPit: Boolean) {
+        this.isPit.value = isPit
+    }
+
+    private fun onError(it: Throwable) {
+        message.value = it.message
     }
 
     fun onStopRecording() {

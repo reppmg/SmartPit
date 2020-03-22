@@ -4,6 +4,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.os.Bundle
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.ReplaySubject
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -12,7 +13,9 @@ class LocationTracker @Inject constructor() : LocationListener {
     val lat = BehaviorSubject.create<Double>()
     val lon = BehaviorSubject.create<Double>()
 
-    private val data = mutableListOf<Location>()
+    val data = mutableListOf<Location>()
+
+    val locationObservable = ReplaySubject.create<Location>()
 
     private var isRecording = false
 
@@ -38,6 +41,7 @@ class LocationTracker @Inject constructor() : LocationListener {
         if (!isRecording) return
         lat.onNext(location.latitude)
         lon.onNext(location.longitude)
+        locationObservable.onNext(location)
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {

@@ -8,3 +8,4 @@ data class RecordWithLocation(
     val location: LatLng,
     val speed: Double
 )
+

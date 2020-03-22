@@ -10,7 +10,10 @@ class UploadUseCase @Inject constructor(
     private val repository: RecordsRepository
 ) {
 
-    fun upload(data: List<RecordWithLocation>): Completable {
-        return repository.upload(data).applyAsync()
+    fun upload(
+        data: List<RecordWithLocation>,
+        events: MutableList<RecordWithLocation>
+    ): Completable {
+        return repository.upload(data, events).applyAsync()
     }
 }

@@ -42,8 +42,9 @@ class MainViewModel(
         if (recordingState.value == false) return
         recordingState.value = false
         val log = recordUseCase.stopRecording()
+        val events = recordUseCase.events
         startProgress()
-        uploadUseCase.upload(log)
+        uploadUseCase.upload(log, events)
             .subscribe(this::onUplaod, this::onApiInteractionError)
             .disposeOnClear()
     }

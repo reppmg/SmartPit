@@ -19,10 +19,13 @@ class RecordingUseCase @Inject constructor(
 ) {
     private val windowSize: Int = 8
 
+    val events = mutableListOf<RecordWithLocation>()
+
     fun startRecording(): Observable<Boolean> {
         locationTracker.start()
         accelerometerTracker.start()
 
+        events.clear()
         return accelerometerTracker.dataObservable
             .buffer(windowSize)
             .map { recordsWindow: List<Record> ->
@@ -33,9 +36,11 @@ class RecordingUseCase @Inject constructor(
                 } else {
                     val events =
                         merger.mergeWithoutInterpolation(recordsWindow, location).toTypedArray()
+                    this.events.addAll(events)
                     PitFinder.hasBumpByMean(events)
                 }
-            }.applyAsync()
+            }
+            .applyAsync()
     }
 
     fun stopRecording(): List<RecordWithLocation> {
